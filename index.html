@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operação Girassol - Decodificador Final</title>
+    <style>
+        :root {
+            --primary-bg: #f8f7fc;
+            --accent-yellow: #ffcb14;
+            --accent-orange: #f5a623;
+            --text-dark: #2d264b;
+            --text-muted: #746f93;
+            --purple-brand: #6c5ce7;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px 10px;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: -10%;
+            right: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(108, 92, 231, 0.05);
+            border-radius: 43% 57% 70% 30% / 45% 45% 55% 55%;
+            z-index: 1;
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            bottom: -10%;
+            left: -5%;
+            width: 40vw;
+            height: 40vw;
+            background: rgba(255, 203, 20, 0.06);
+            border-radius: 50% 40% 30% 70% / 50% 60% 40% 50%;
+            z-index: 1;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 950px;
+            background: var(--card-bg);
+            border-radius: 32px;
+            box-shadow: 0 20px 50px rgba(108, 92, 231, 0.08);
+            display: block;
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .column-visual {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #fffcf0 0%, #fff6d6 100%);
+            text-align: center;
+            position: relative;
+            padding: 40px 20px;
+            border-bottom: 1px solid rgba(255, 203, 20, 0.2);
+        }
+
+        .column-form {
+            display: block;
+            width: 100%;
+            padding: 40px 25px;
+            background: #ffffff;
+        }
+
+        /* Estrutura Padronizada do Girassol (Igual para ambas as telas) */
+        .sunflower-art {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 20px auto;
+        }
+
+        .sunflower-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90px;
+            height: 90px;
+            background: radial-gradient(circle, #503319 0%, #2f1d0c 100%);
+            border-radius: 50%;
+            z-index: 5;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 8px 20px rgba(47,29,12,0.3);
+        }
+
+        .sunflower-center::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 50%;
+            opacity: 0.15;
+            background-image: radial-gradient(#fff 20%, transparent 20%), radial-gradient(#fff 20%, transparent 20%);
+            background-size: 8px 8px;
+            background-position: 0 0, 4px 4px;
+        }
+
+        .petals-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: rotateSunflower 60s linear infinite;
+        }
+
+        .petal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 35px;
+            height: 105px;
+            background: linear-gradient(to top, var(--accent-yellow) 20%, #fff099 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transform-origin: center bottom;
+            box-shadow: 0 4px 8px rgba(245, 166, 35, 0.15);
+        }
+
+        /* Distribuição das Pétalas */
+        .petal:nth-child(1)  { transform: translate(-50%, -100%) rotate(0deg); }
+        .petal:nth-child(2)  { transform: translate(-50%, -100%) rotate(30deg); }
+        .petal:nth-child(3)  { transform: translate(-50%, -100%) rotate(60deg); }
+        .petal:nth-child(4)  { transform: translate(-50%, -100%) rotate(90deg); }
+        .petal:nth-child(5)  { transform: translate(-50%, -100%) rotate(120deg); }
+        .petal:nth-child(6)  { transform: translate(-50%, -100%) rotate(150deg); }
+        .petal:nth-child(7)  { transform: translate(-50%, -100%) rotate(180deg); }
+        .petal:nth-child(8)  { transform: translate(-50%, -100%) rotate(210deg); }
+        .petal:nth-child(9)  { transform: translate(-50%, -100%) rotate(240deg); }
+        .petal:nth-child(10) { transform: translate(-50%, -100%) rotate(270deg); }
+        .petal:nth-child(11) { transform: translate(-50%, -100%) rotate(300deg); }
+        .petal:nth-child(12) { transform: translate(-50%, -100%) rotate(330deg); }
+
+        .petal.back {
+            background: linear-gradient(to top, var(--accent-orange) 0%, var(--accent-yellow) 100%);
+            width: 38px;
+            height: 110px;
+            z-index: 2;
+            opacity: 0.85;
+        }
+        .petal.back:nth-child(13) { transform: translate(-50%, -100%) rotate(15deg); }
+        .petal.back:nth-child(14) { transform: translate(-50%, -100%) rotate(45deg); }
+        .petal.back:nth-child(15) { transform: translate(-50%, -100%) rotate(75deg); }
+        .petal.back:nth-child(16) { transform: translate(-50%, -100%) rotate(105deg); }
+        .petal.back:nth-child(17) { transform: translate(-50%, -100%) rotate(135deg); }
+        .petal.back:nth-child(18) { transform: translate(-50%, -100%) rotate(165deg); }
+        .petal.back:nth-child(19) { transform: translate(-50%, -100%) rotate(195deg); }
+        .petal.back:nth-child(20) { transform: translate(-50%, -100%) rotate(225deg); }
+        .petal.back:nth-child(21) { transform: translate(-50%, -100%) rotate(255deg); }
+        .petal.back:nth-child(22) { transform: translate(-50%, -100%) rotate(285deg); }
+        .petal.back:nth-child(23) { transform: translate(-50%, -100%) rotate(315deg); }
+        .petal.back:nth-child(24) { transform: translate(-50%, -100%) rotate(345deg); }
+
+        .visual-title { font-size: 24px; font-weight: 700; color: var(--text-dark); margin-top: 10px; }
+        .visual-subtitle { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
+
+        .headline { font-size: 26px; font-weight: 800; color: var(--text-dark); margin-bottom: 12px; letter-spacing: -0.5px; }
+        .description { font-size: 15px; color: var(--text-muted); margin-bottom: 30px; line-height: 1.6; }
+        .form-group { margin-bottom: 25px; position: relative; }
+        .input-label { display: block; font-size: 13px; font-weight: 700; color: var(--text-dark); margin-bottom: 10px; text-transform: uppercase; }
+        
+        .input-field {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--text-dark);
+            background-color: #f1f0f7;
+            border: 2px solid transparent;
+            border-radius: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            background-color: #ffffff;
+            border-color: var(--purple-brand);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.08);
+        }
+
+        .input-indicator { font-size: 11px; color: var(--purple-brand); margin-top: 8px; font-weight: 500; display: block; line-height: 1.4; }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, var(--purple-brand) 0%, #5442d6 100%);
+            color: #ffffff;
+            border: none;
+            padding: 18px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(108, 92, 231, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(108, 92, 231, 0.35); }
+        .error-message { color: #e74c3c; font-size: 13px; font-weight: 600; margin-top: 8px; display: none; }
+
+        /* TELA DO CERTIFICADO */
+        .certificate-screen {
+            display: none;
+            width: 100%;
+            max-width: 850px;
+            background: #ffffff;
+            padding: 20px 10px;
+            border-radius: 32px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.6s ease-out;
+            z-index: 10;
+        }
+
+        .certificate-border {
+            border: 4px double rgba(255, 203, 20, 0.4);
+            padding: 40px 15px;
+            border-radius: 24px;
+            background: radial-gradient(circle at top right, rgba(255, 252, 240, 0.5), transparent);
+        }
+
+        /* O Girassol no Certificado fica no topo, empurrando o texto para baixo */
+        .cert-badge {
+            display: block;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .cert-headline { font-size: 32px; font-weight: 800; color: var(--text-dark); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; }
+        .cert-subtext { font-size: 15px; color: var(--text-muted); margin-bottom: 25px; line-height: 1.6; max-width: 600px; margin-left: auto; margin-right: auto; }
+        
+        .cert-user-code {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--purple-brand);
+            background: #f1f0f7;
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            letter-spacing: 1.5px;
+        }
+
+        .cert-meta-grid {
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            border-top: 1px solid #eef;
+            padding-top: 25px;
+        }
+
+        .meta-item { display: block; width: 100%; text-align: center; margin-bottom: 20px; }
+        .meta-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 4px; }
+        .meta-value { font-size: 16px; font-weight: 700; color: var(--text-dark); }
+        
+        .stamp-signature { margin-top: 15px; font-size: 14px; font-weight: 600; color: var(--accent-orange); line-height: 1.4; }
+        
+        .btn-group { margin-top: 30px; width: 100%; display: flex; justify-content: center; }
+
+        .btn-secondary {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            background: var(--purple-brand);
+            color: #ffffff;
+            border: none;
+            padding: 16px 32px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2);
+            text-transform: uppercase;
+        }
+
+        .btn-secondary:hover { background: #5442d6; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(108, 92, 231, 0.3); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes rotateSunflower { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* Media Queries Desktop */
+        @media (min-width: 769px) {
+            .main-container { display: table; table-layout: fixed; }
+            .column-visual { display: table-cell; width: 45%; border-bottom: none; border-right: 1px solid rgba(255, 203, 20, 0.2); padding: 50px 40px; vertical-align: middle; }
+            .column-form { display: table-cell; width: 55%; padding: 60px 50px; vertical-align: middle; }
+            .headline { font-size: 28px; }
+            .certificate-screen { padding: 40px 30px; }
+            .certificate-border { padding: 40px 20px; }
+            .cert-headline { font-size: 38px; }
+            .meta-item { display: inline-block; width: 48%; margin-bottom: 0; }
+            .btn-secondary { width: auto; }
+        }
+
+        @media print {
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            body { background: #ffffff; padding: 0; }
+            .main-container, body::before, body::after, .btn-group { display: none !important; }
+            .certificate-screen { display: block !important; box-shadow: none; padding: 0; width: 100%; max-width: 100%; }
+            .certificate-border { border: 4px double #ffcb14 !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container" id="verificationCard">
+        <div class="column-visual">
+            <div class="sunflower-art">
+                <div class="sunflower-center"></div>
+                <div class="petals-container">
+                    <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+                    <div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div>
+                </div>
+            </div>
+            <h2 class="visual-title">Operação Girassol</h2>
+            <p class="visual-subtitle">Fase Final: Descriptografar o Sistema</p>
+        </div>
+
+        <div class="column-form">
+            <h1 class="headline">Missão Concluída?</h1>
+            <p class="description">Equipe, vocês conseguiram passar pelas 6 estações do nosso mural? Juntem todas as respostas num código só e digitem abaixo para resgatar o vosso distintivo de proteção!</p>
+            
+            <form id="authForm" onsubmit="processarVerificacao(event)">
+                <div class="form-group">
+                    <label class="input-label">Digitar Código das 6 Estações</label>
+                    <input type="text" id="inputCodigo" class="input-field" maxlength="35" autocomplete="off" required oninput="tratarInput(this)">
+                    <span class="input-indicator">↑ COLOQUEM O VOSSO CÓDIGO EXATAMENTE NESTE CAMPO ACIMA</span>
+                    <div id="erroMsg" class="error-message">Código incorreto! Voltem ao mural, confiram os cálculos e tentem de novo.</div>
+                </div>
+                <button type="submit" class="btn-primary">Desbloquear Meu Certificado</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="certificate-screen" id="certificateCard">
+        <div class="certificate-border">
+            
+            <div class="cert-badge">
+                <div class="sunflower-art">
+                    <div class="sunflower-center"></div>
+                    <div class="petals-container">
+                        <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+                        <div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div><div class="petal back"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h1 class="cert-headline">Agente de Proteção</h1>
+            <p class="cert-subtext">Parabéns aos novos defensores! Vocês superaram todos os desafios lógicos da Operação Girassol, aprenderam a identificar riscos e agora fazem parte da nossa rede segura de proteção.</p>
+            
+            <div class="cert-user-code" id="exibirCodigo">CÓDIGO: -------</div>
+
+            <div class="cert-meta-grid">
+                <div class="meta-item">
+                    <p class="meta-label">Missão Finalizada Em</p>
+                    <p class="meta-value" id="certData">--/--/----</p>
+                </div>
+                <div class="meta-item">
+                    <p class="meta-label">Horário de Registro</p>
+                    <p class="meta-value" id="certHora">--:--:--</p>
+                </div>
+            </div>
+            <p class="stamp-signature">✓ Missão Homologada com Sucesso no Maio Laranja</p>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="window.print()">Imprimir Certificado</button>
+        </div>
+    </div>
+
+    <script>
+        const CHAVE_CORRETA = "81018054241921"; 
+
+        function tratarInput(input) {
+            let limpo = input.value.replace(/[^a-zA-Z0-9]/g, '');
+            input.value = limpo.toUpperCase();
+            document.getElementById('erroMsg').style.display = 'none';
+        }
+
+        function processarVerificacao(event) {
+            event.preventDefault();
+            const input = document.getElementById('inputCodigo');
+            const valorDigitado = input.value.trim();
+
+            if (valorDigitado !== CHAVE_CORRETA) {
+                document.getElementById('erroMsg').style.display = 'block';
+                return;
+            }
+
+            const agora = new Date();
+            const dataFormatada = agora.toLocaleDateString('pt-BR');
+            const horaFormatada = agora.toLocaleTimeString('pt-BR');
+
+            document.getElementById('exibirCodigo').innerText = `CÓDIGO: ${valorDigitado}`;
+            document.getElementById('certData').innerText = dataFormatada;
+            document.getElementById('certHora').innerText = horaFormatada;
+
+            document.getElementById('verificationCard').style.display = 'none';
+            document.getElementById('certificateCard').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
